@@ -1,15 +1,24 @@
  
 
 
-![](document/tile.jpeg)
-
-# Darth
-> DataSet for Earth
+![](document/hansen_tree_cover.png)
 
 
+****
 
-### [Guide to Start](document/GuidetoStart.md)
+# DARTH
+**The Satellite Imagery DataSet Toolkit**
 
+
+## Install
+
+```bash
+pip install darth
+```
+
+## Useage:
+|[Guide to Start](document/GuidetoStart.md)|[Document](document/doc.md)|
+|:---:|:---:|
 
 
 

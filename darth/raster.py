@@ -143,7 +143,7 @@ class Raster():
         self.image = image
         return image
 
-    def set(self, Data):
+    def setdata(self, Data):
         """
         write a new raster file with bool type data
         """
