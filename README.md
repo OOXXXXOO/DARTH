@@ -196,7 +196,7 @@ Additionally, https://www.openstreetmap.org/ has global vector product as below:
 
 
 ```python
-from Data.IO.vector import Vector
+from darth.vector import Vector
 Building=Vector('/home/winshare/Downloads/2017-07-03_asia_china.mbtiles')#3.7GB SQLite-MBTiles . The China Main Class Vector Object.
 ```
 
