@@ -1,22 +1,16 @@
 ![](hansen_tree_cover.png)
 # Guide to Start
 
-`process` is a full function dataset generate flow & it will download map production datasource like:
-
-
+This demo work for generate dataset quickly.
 ```python
-import sys 
-sys.path.append("/workspace/Darth/darth")
 from process import Process
-```
 
-
-```python
 vector="/workspace/osm-2017-07-03-v3.6.1-china_beijing.mbtiles"
 cord=(116.5, 39.9, 116.6, 39.8, 14)
 class_key='building'
 datasource="Google China"
 DataSetName="BuildingDataSet"
+
 ```
 
 `process` is a full function dataset generate flow & it will download map production datasource like:
@@ -57,7 +51,8 @@ DataSetName="BuildingDataSet"
    * CartoDb Positron,
    * Bing VirtualEarth
    
-for get target information as deeplearning traing , we need raster vector object that from vector datasource like:
+for get target information as deeplearning training , we need rasterize vector object that from vector datasource like:
+
    * MBTiles 
    * Shapefile
    * Pbf
@@ -92,7 +87,7 @@ input args:
 * `Merge`        : Merge the tiles file to whole file or not
 * `Keep_local`   : The last step will delete local cache ,this option could choose to save it.
 * `upload`       : Use Network Strong Server or not (Just support [Huawei OBS server](https://developer.huaweicloud.com/sdk?OBS) now)
-* `thread`
+* `thread`       : download thread count
 
 
 ```python
