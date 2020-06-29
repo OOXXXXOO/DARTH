@@ -1,0 +1,10 @@
+certifi==2020.6.20
+decorating==0.6.1
+esdk-obs-python==3.20.1
+GDAL==3.1.0
+numpy
+olefile==0.46
+Pillow==7.1.2
+python-slugify==3.0.3
+text-unidecode==1.2
+tqdm==4.46.1
