@@ -23,7 +23,7 @@ pip install darth
 
 
 The Satellite Imagery DataSet is important part to train, validation the model of different mission. 
-This toolkit work for download different datasources and use specific layer (class) in OSM Vector Data to generate dataset for train or validation model.
+This toolkit work for download different datasources and use specific layer (class) in [OSM Vector Data](https://openmaptiles.com/downloads/planet/) to generate dataset for train or validation model.
 
 ### Support Vector Datasource type:
 
@@ -99,15 +99,19 @@ Google=downloader("Google Satellite")
 
 ****
 ### Demo:
-We could choose a Position like Saltlake.
+We could choose a position like the Saltlake city, Utah states.
+
 Salt Lake City is located in United States country, in North America continent (or region). DMS latitude longitude coordinates for Salt Lake City are: 40°45'38.81"N, 111°53'27.78"W.
 • Latitude position: Equator ⇐ 4532km (2816mi) ⇐ Salt Lake City ⇒ 5475km (3402mi) ⇒ North pole.
 • Longitude position: Salt Lake City ⇐ 8644km (5371mi) ⇐ Prime meridian. GMT: -6h.
 • Local time in Salt Lake City: Friday 1:35 am, May 22, 2020. [*time info]
 
 We need plan a area that describe by WGS84 lonlat,like:
-Cord1=(-111.89105,40.76078) # Left Top Lonlat
-Cord2=(-111.8,40.7)# Right Bottom Lonlat
+
+* Cord1=(-111.89105,40.76078) # Left Top Lonlat
+
+* Cord2=(-111.8,40.7)# Right Bottom Lonlat
+
 In addition, we need set the `zoom level` that mean resolution of each map tile. Relative info:
 
 
@@ -127,7 +131,7 @@ addcord() as a function ,input is WGS cord of left-top point & right-bottom poin
 
 
 ```python
-Google.add_cord(116.3, 39.9, 116.6, 39.7, 13)#WGS Form
+Google.add_cord(116.3, 39.9, 116.6, 39.7, 13)# WGS Lonlat Form
 Google.download()
 #Google.merge()#Merge to one tif file 
 ```
@@ -189,8 +193,6 @@ The each downloaded item will has a self description key like:
 
 ```python
 tiles=[i["path"] for i in Google.result]
-# for tile in Google.result:
-#     print(tile)
 ```
 
 ****
@@ -206,7 +208,7 @@ Additionally, https://www.openstreetmap.org/ has global vector product as below:
 
 ```python
 from darth.vector import Vector
-Building=Vector('/home/winshare/Downloads/2017-07-03_asia_china.mbtiles')#3.7GB SQLite-MBTiles . The China Main Class Vector Object.
+Building=Vector('/home/winshare/Downloads/2017-07-03_asia_china.mbtiles')# 3.7GB SQLiteBased-MBTiles . The China Main Class Vector Object.
 ```
 
 
@@ -254,7 +256,9 @@ Building=Vector('/home/winshare/Downloads/2017-07-03_asia_china.mbtiles')#3.7GB 
     
 ****
 The most of SQLite based mbtiles vector database will have multi-layer, but wkt based shapefile & geojson almost have single layer.
-Normally,Name of layer is class name that must set as default layer by `getDefaultLayerbyName` function.
+Normally , Name of layer is class name that must set as default layer by `getDefaultLayerbyName` function. So we need choose a default layer by 'LayerName' that will generate binary label for deep learning training.
+
+* Of course , the function of multi-layer will update in next version.
 ****
 
 
@@ -263,22 +267,18 @@ Building.getDefaultLayerbyName("building")
 ```
 
     ----- Set Default Layer  building  :  <osgeo.ogr.Layer; proxy of <Swig Object of type 'OGRLayerShadow *' at 0x7fd4b2566660> >
-
-
-
-
-
     <osgeo.ogr.Layer; proxy of <Swig Object of type 'OGRLayerShadow *' at 0x7fd4b2566660> >
 
 
 
 ****
 ### Step 2:
+
 If the data use for model training, we should have label that could be generate by rasterize vector file. Normally, the data will label by artificial work.But human resources has limit in huge object label with high resolution imagery. The OSM Vector data has a worldwide version that save in sqlite based mbtiles file system that could be decode by GDAL library.
 
 The Class Vector and Raster is important part of data I/O. Rasterisation (or rasterization) is the task of taking an image described in a vector graphics format (shapes) and converting it into a raster image (a series of pixels, dots or lines, which, when displayed together, create the image which was represented via shapes).[1][2] The rasterised image may then be displayed on a computer display, video display or printer, or stored in a bitmap file format. Rasterisation may refer to the technique of drawing 3D models, or the conversion of 2D rendering primitives such as polygons, line segments into a rasterized format.
 
-The map data has better relative accuracy than temporary human label work that mean the vector map has potential to be ground truth. So, transform the exist vector to raster data that is indispensable method for generate training data in DL-based computer vision mission.
+The map data has better relative accuracy than temporary human label work that mean the vector map has potential to be ground-truth. So, transform the exist vector to raster data that is indispensable method for generate training data in deeplearning-based computer vision mission.
 
 Rasterize:
 
@@ -286,15 +286,20 @@ Rasterize:
 ****
 
 #### Notes:
+
 If the vector layers have a huge geography space and enormous amount of data item that will cause the indexing process will extremely inefficient in rasterize process. 
+
 We set a rect size like a bounding box of Beijing city from the geographic area of CHINA. Then, we set the same area as filters in the whole space.
+
 That could show the speed of the same mission on with filter and without a filter.
 
-    # Experiment
-    # ----------------------------------- Speed ---------------------------------- #
-    #                   item/Sec    100000sample
-    # withoutFilter        34          94  hour
-    # withFilter           3           8.3 hour
+|Experiment|||
+|:---:|:---:|:---:|
+|               |item/Sec|       100000sample|
+|withoutFilter|        34|           94  hour|
+| withFilter|           3|           8.3 hour|
+
+Although i am already boost the rasterize flow , but that still run on single process ,i still want to find a way that run GDAL rasterize on python multiprocessing.
 
 
 ```python
@@ -312,7 +317,9 @@ label=Building.generate(tiles)
 
 
 If we write the 'image' & 'label' to csv / json that could be great dataset for deeplearning training work flow.
-We could show the label&image like that.
+
+And we have finished that on the [Process](document/GuidetoStart.md) workflow.
+We could show the label&image like that. 
 
 
 ```python
@@ -334,6 +341,10 @@ plt.imshow(label),plt.show()
 
 
 ****
+
+
+
+Neural network , let's fuck!
 
 
 Copyright 2020 winshare
