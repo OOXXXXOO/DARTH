@@ -19,6 +19,7 @@ pip install d-arth
 ```
 
 #### Addition Huawei OBS Server Package (Optional)
+**After version 0.0.3, the process will install OBS package automatically.**
 
 ```bash
 cd obs-src
