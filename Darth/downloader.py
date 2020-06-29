@@ -38,8 +38,8 @@ from tqdm import tqdm
 
 # -------------------------------- Custom Lib -------------------------------- #
 import urllib.request as ur
-from subscription import MAP_URLS,Tilesize
-from transform import getExtent,wgs_to_tile,TileXYToQuadKey,saveTiff,wgs_to_mercator
+from .subscription import MAP_URLS,Tilesize
+from .transform import getExtent,wgs_to_tile,TileXYToQuadKey,saveTiff,wgs_to_mercator
 
 
 

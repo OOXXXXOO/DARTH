@@ -5,9 +5,9 @@ import gdal
 
 
 
-from downloader import downloader
-from obsclient import bucket
-from vector import Vector
+from .downloader import downloader
+from .obsclient import bucket
+from .vector import Vector
 
 
 def Process(
