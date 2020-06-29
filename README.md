@@ -15,7 +15,7 @@
 
 
 ```bash
-pip install darth
+pip install d-arth
 ```
 
 #### Addition Huawei OBS Server Package (Optional)
