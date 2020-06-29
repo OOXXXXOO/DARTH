@@ -25,6 +25,11 @@ cd obs-src
 python setup.py install
 ```
 #### Requirement:
+
+**After my test installation, i recommand you install 'GDAL' with conda/miniconda first not pip.** 
+
+if you want see the detail of requirements or install that manually:
+
 ```bash
 pip install -f requirement.txt
 ```
