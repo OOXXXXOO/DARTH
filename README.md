@@ -12,8 +12,21 @@
 
 ## Install
 
+
+
 ```bash
 pip install darth
+```
+
+#### Addition Huawei OBS Server Package (Optional)
+
+```bash
+cd obs-src
+python setup.py install
+```
+#### Requirement:
+```bash
+pip install -f requirement.txt
 ```
 
 ## Useage:
