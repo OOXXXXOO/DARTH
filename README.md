@@ -363,7 +363,7 @@ plt.imshow(label),plt.show()
 
 
 
-Neural network , let's fuck!
+Neural Network for GIS , let's fuck!
 
 
 Copyright 2020 winshare

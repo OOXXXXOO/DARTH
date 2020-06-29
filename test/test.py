@@ -10,7 +10,7 @@ class_key='building'
 datasource="Google China"
 DataSetName="BuildingDataSet"
 
-from Darth.process import Process
+from darth.process import Process
 
 Process(
     vector,

@@ -22,7 +22,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="d-arth", # Replace with your own username
-    version="0.0.3",
+    version="0.0.6",
     author="Winshare Tom",
     author_email="tanwenxuan@live.com",
     description="The Satellite Imagery DataSet Toolkit",
@@ -47,5 +47,6 @@ setuptools.setup(
         "text-unidecode==1.2",
         "tqdm==4.46.1"
     ],
+    license='Apache License Version 2.0',
     python_requires='>=3.6',
 )
