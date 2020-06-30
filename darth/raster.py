@@ -37,7 +37,7 @@ import numpy as np
 
 class Raster():
     def __init__(self, filename=None, channel=[
-                 0, 1, 2], display=False, debug=False):
+                 0, 1, 2], debug=False):
         """
         filename: could be filedir or path of single file
         """
@@ -89,8 +89,7 @@ class Raster():
             else:
                 self.image = self.image.transpose(1, 2, 0)
                 self.image = self.image[:, :, self.channel[:]]
-        if self.display:
-            self.displayimagery()
+
 
     # def displayimagery(self):
     #     self.percentage = self.fast_percentager_strentching(self.image)
@@ -152,9 +151,9 @@ class Raster():
         self.RasterSet = True
         self.imageoutput = Data
 
-    def writeimagery(self, name=None, format=["png"]):
+    def writeimagery(self, name=None, format="png"):
         if name is None:
-            name = self.filename + "_imagery.png"
+            name = self.filename + "_imagery."+format
         cv2.imwrite(name, self.image)
 
     def writetif(self, outputname,):

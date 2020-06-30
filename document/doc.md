@@ -17,42 +17,34 @@
 # Document 
 
 - [Document](#document)
-  - [raster](#raster)
-    - [readtif](#readtif)
-    - [fast_percentager_strentching](#fast_percentager_strentching)
-    - [writeimagery](#writeimagery)
-    - [resize_raster](#resize_raster)
-    - [writethreshold2shp](#writethreshold2shp)
-      - [createdataset](#createdataset)
-      - [imagexy2geo](#imagexy2geo)
-      - [lonlat2geo](#lonlat2geo)
-      - [geo2lonlat](#geo2lonlat)
-      - [getSRSPair](#getsrspair)
-      - [clear](#clear)
-      - [displayimagery](#displayimagery)
-      - [setdata](#setdata)
-      - [geo2imagexy](#geo2imagexy)
-      - [lonlat2imagexy](#lonlat2imagexy)
-      - [imagexy2lonlat](#imagexy2lonlat)
-  - [vector](#vector)
-    - [readshp](#readshp)
-    - [getDefaultLayerbyName](#getdefaultlayerbyname)
+  - [`Raster`](#raster)
+    - [`readtif(tif_file_path)`](#readtiftif_file_path)
+    - [`fast_percentager_strentching(image=None, percentage=2, sample=10000)`](#fast_percentager_strentchingimagenone-percentage2-sample10000)
+    - [`writeimagery(name=None, format="png")`](#writeimagerynamenone-formatpng)
+    - [`resize_raster(resize_ratio=0.5)`](#resize_rasterresize_ratio05)
+    - [`writethreshold2shp()`](#writethreshold2shp)
+    - [Cord Transform](#cord-transform)
+      - [`imagexy2geo`](#imagexy2geo)
+      - [`lonlat2geo`](#lonlat2geo)
+      - [`geo2lonlat`](#geo2lonlat)
+      - [`getSRSPair`](#getsrspair)
+      - [`geo2imagexy`](#geo2imagexy)
+      - [`lonlat2imagexy`](#lonlat2imagexy)
+      - [`imagexy2lonlat`](#imagexy2lonlat)
+    - [`clear()`](#clear)
+  - [`Vector`](#vector)
+    - [`readshp(input_shp_path)`](#readshpinput_shp_path)
+    - [`getDefaultLayerbyName(name)`](#getdefaultlayerbynamename)
     - [getbounding](#getbounding)
-    - [getdataset](#getdataset)
-    - [SaveTo](#saveto)
     - [SaveVectorByLayerName](#savevectorbylayername)
     - [Rasterize](#rasterize)
     - [generate](#generate)
     - [reset_layer](#reset_layer)
-  - [downloader](#downloader)
+  - [`downloader`](#downloader)
     - [add_cord](#add_cord)
-    - [downloadurl](#downloadurl)
     - [download](#download)
-    - [get_urls](#get_urls)
-    - [get_url](#get_url)
     - [merge](#merge)
   - [process](#process)
-    - [Process](#process-1)
   - [OBS(Optional)](#obsoptional)
     - [bucket](#bucket)
       - [getBucketMetadata](#getbucketmetadata)
@@ -64,56 +56,331 @@
     - [QGIS Map Resources Script:](#qgis-map-resources-script)
 
 
-## raster
+## `Raster`
+Tagged Image File Format, abbreviated TIFF or TIF, is a computer file format for storing raster graphics images, popular among graphic artists, the publishing industry,[1] and photographers. TIFF is widely supported by scanning, faxing, word processing, optical character recognition, image manipulation, desktop publishing, and page-layout applications.[2] The format was created by Aldus Corporation for use in desktop publishing. It published the latest version 6.0 in 1992, subsequently updated with an Adobe Systems copyright after the latter acquired Aldus in 1994.
 
-### readtif
-### fast_percentager_strentching
-### writeimagery
-### resize_raster
-### writethreshold2shp
-#### createdataset
-#### imagexy2geo
-#### lonlat2geo
-#### geo2lonlat
-#### getSRSPair
-#### clear
-#### displayimagery
-#### setdata
-#### geo2imagexy
-#### lonlat2imagexy
-#### imagexy2lonlat
+The GDAL lib could decode tif file with full geography information. 
+
+python
+```python
+from darth.raster import Raster
+r=Raster() # init  without file
+r1=Raster("input.tif") #  init with file
+```
+
+### `readtif(tif_file_path)`
+
+also could read file in anywhere:
+
+```python
+r.readtif("input.tif")
+```
 
 
-## vector
-### readshp
-### getDefaultLayerbyName
+### `fast_percentager_strentching(image=None, percentage=2, sample=10000)`
+
+the huge imagery percentage strentching is a slow process , this project re-design the strentching algorithm to boost the process to o(1).
+
+eg - input
+![](Figure_1-11.png)
+
+eg - output (original percentage strentching algorithm (30s) )
+![](Figure_1-8.png)
+
+eg - ouput (fast percentage strentching algorithm (1s))
+
+![](Figure_1-9.png)
+
+
+```python
+Imagery=r.fast_percentager_strentching()
+``` 
+if the image is none , default image is result of Class.image
+
+### `writeimagery(name=None, format="png")`
+
+
+write a pure image file like png 
+```python
+r.writeimagery('image')
+```
+
+
+
+### `resize_raster(resize_ratio=0.5)`
+
+Some raster has wrong size or GDAL datasets.This function will keep the geography information & resize image . 
+
+### `writethreshold2shp()`
+
+vectorize binary ndarray . you must set binary uint8 ndarray data first. That will generate shapefile of vectorized binary information.
+```python
+Data=np.ones((512,512),dtype=np.uint8)
+r.setdata(Data)
+r.writethreshold2shp()
+```
+
+### Cord Transform
+#### `imagexy2geo`
+#### `lonlat2geo`
+#### `geo2lonlat`
+#### `getSRSPair`
+#### `geo2imagexy`
+#### `lonlat2imagexy`
+#### `imagexy2lonlat`
+All the transform function could work that base on you already read a tiff file that has decoded to gdal dataset successful.
+like :
+```
+cord=r.imagexy2geo(0,0)
+
+``` 
+that will transform the image cord to geo cord.
+
+### `clear()`
+clear all the class status of IO
+```python
+r.clear()
+
+```
+
+## `Vector`
+
+this class already support some vector file format:
+
+   * MBTiles 
+   * Shapefile
+   * Pbf
+   * Geojson
+
+```python
+from darth.vector import Vector
+V=Vector("input_shp_path.shp")# init with shp
+v=Vector()# init without shp
+```
+Additionally, the `Vector` class inherit the `Raster` class , so you could use and call all function with single instance.like:
+```python
+v.readtif("input.tif")
+```
+
+
+you could use this class to solve some rasterize problems
+### `readshp(input_shp_path)`
+
+```python
+v.readshp(input_shp_path)
+
+```
+### `getDefaultLayerbyName(name)`
+Choose layer name as default layer.
+eg:
+    # -----Description :  /workspace/osm-2017-07-03-v3.6.1-china_beijing.mbtiles
+    # -----LayerCount: 15
+    # -----Layer : 0  LayerName :  water 
+    # -----Layer : 1  LayerName :  waterway 
+    # -----Layer : 2  LayerName :  landcover 
+    # -----Layer : 3  LayerName :  landuse 
+    # -----Layer : 4  LayerName :  mountain_peak 
+    # -----Layer : 5  LayerName :  park 
+    # -----Layer : 6  LayerName :  boundary 
+    # -----Layer : 7  LayerName :  aeroway 
+    # -----Layer : 8  LayerName :  transportation 
+    # -----Layer : 9  LayerName :  building 
+    # -----Layer : 10  LayerName :  water_name 
+
+```python
+v.getDefaultLayerbyName("building")
+```
+
 ### getbounding
-### getdataset
-### SaveTo
+get vector file bounding box cord
+```python
+bounding=v.getbounding()
+```
+
 ### SaveVectorByLayerName
+`SaveVectorByLayerName(LayerName, outputname, format="GeoJSON")`
+This function could be save the one layer of multi-layer vector object .
+```python
+v.SaveVectorByLayerName("building","building.shp"):
+```
+
+
+
 ### Rasterize
+`Rasterize(outputname, Nodata=0)`
+map the vector layer with raster dataset and generate rasterized vector file.
+Tips :
+this function just read defaultlayer ,so must set default layer first.
+
+
 ### generate
+`generate(tiles,output_path="./label"):`
+* tiles       :        list of tif file paths
+* output_path :        dir of target output
+
+```python
+v.generate(tiles)
+```
+
 ### reset_layer
 
-## downloader
+reset the default layer & all layer option
+```python
+v.reset_layer()
+```
+
+## `downloader`
+`downloader(server=None,thread_count=4,format='tif')`
+
+`downloader` is resources lib & all the source could found here like :
+
+```python
+    Google=downloader("Google Satellite")
+```
+
+I don't test the limit of download count . But different country may be has totally different problem.
+For example ,in china internet enviroment ,'Google Satellite' cloud be nothing response with code 404.
+At this time, we use the OSM standard to support datasource list:
+
+    
+   * Google
+   * Google China,
+   * Google Maps,
+   * Google Satellite,
+   * Google Terrain,
+   * Google Terrain Hybrid,
+   * Google Satellite Hybrid
+   * Stamen Terrain
+   * Stamen Toner
+   * Stamen Toner Light
+   * Stamen Watercolor
+   * Wikimedia Map
+   * Wikimedia Hike Bike Map
+   * Esri Boundaries Places
+   * Esri Gray (dark)
+   * Esri Gray (light)
+   * Esri National Geographic
+   * Esri Ocean,
+   * Esri Satellite,
+   * Esri Standard,
+   * Esri Terrain,
+   * Esri Transportation,
+   * Esri Topo World,
+   * OpenStreetMap Standard,
+   * OpenStreetMap H.O.T.,
+   * OpenStreetMap Monochrome,
+   * OpenTopoMap,
+   * Strava All,
+   * Strava Run,
+   * Open Weather Map Temperature,
+   * Open Weather Map Clouds,
+   * Open Weather Map Wind Speed,
+   * CartoDb Dark Matter,
+   * CartoDb Positron,
+   * Bing VirtualEarth
+
+
+
 ### add_cord
-### downloadurl
+` add_cord(self, left, top, right, bottom, zoom, style='s'):`
+
+Compute the Extent by `(x1,y1,x2,y2)`-Retangle coordinate A
+        
+    I: coordinate A->WGS Extent of tile
+    
+    II: Extent->Tile coordinate 
+    
+    III: Tile coordinate-> array of x,y coordinates WGS left top point in each tile
+        
+`addcord()` as a function ,input is WGS cord of left-top point & right-bottom point x1,y1,x2,y2,additional zoom level that mean different level density of data grid.
+
+    left, top : left-top coordinate, for example (100.361,38.866)
+
+    right, bottom : right-bottom coordinate
+
+    z : zoom
+    filePath : File path for storing results, TIFF format
+
+```python
+    Google.add_cord(116.3, 39.9, 116.6, 39.7, 13)#WGS Form
+```
+
+
 ### download
-### get_urls
-### get_url
+`download(output_path="./images")`
+download the file to `output_path`
+
+
 ### merge
 
-
+Merge the all file to single file or not
+```python
+Google.merge()
+```
 ## process
-### Process
+
+`Process(VectorDataSource,WgsCord,Class_key,DataSourcesType='Google China',DataSetName="DataSet",Remote_dataset_root="DataSets/",Thread_count=2,Nodata=0,Merge=False,Keep_local=True,Over_write=True,Upload=False,**args)`
+
+* `vector`       : local path of vector object
+* `cord`         : WGS Standard Cord (min-lon,min-lat,max-lon,maxlat,zoom_level)
+* `class_key`    : The class you need generate
+* `Datasource`   : Map production datasource name
+* `Merge`        : Merge the tiles file to whole file or not
+* `Keep_local`   : The last step will delete local cache ,this option could choose to save it.
+* `upload`       : Use Network Strong Server or not (Just support [Huawei OBS server](https://developer.huaweicloud.com/sdk?OBS) now)
+* `thread`       : download thread count
+
+* args:
+    for obs server:
+
+        ak : access_key_id,    
+        sk : secret_access_key,    
+        server : server
+        bn :  bucketname
+
+
+1. Step I:
+     * Init Downlaoder,Bucket(Optional),Vector
+
+2. Step II:
+     * Init default vector layer
+     * Init area , imagery level of mission
+
+3. Step III:
+
+     * Download
+     * Merge(Optional)
+     * Rasterize
+
+4. Step IV:
+
+     * Upload to Bucket
+
+5. Last Step:
+     * If don't save temp dataset ,clean the cache
+    
+
+
+
+
+
+
+
 
 ## OBS(Optional) 
+
 ### bucket
+
 #### getBucketMetadata
+
 #### upload
+
 #### download
+
 #### cd
+
 #### delete
+
 #### ls
 
 ### QGIS Map Resources Script:

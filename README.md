@@ -177,7 +177,33 @@ Google.download()
 
 
 
+##### Cord System
+TMS Global Mercator Profile
 
+```bash
+
+	Functions necessary for generation of tiles in Spherical Mercator projection,
+	EPSG:900913 (EPSG:gOOglE, Google Maps Global Mercator), EPSG:3785, OSGEO:41001.
+
+	Such tiles are compatible with Google Maps, Microsoft Virtual Earth, Yahoo Maps,
+	UK Ordnance Survey OpenSpace API, ...
+	and you can overlay them on top of base maps of those web mapping applications.
+	
+	Pixel and tile coordinates are in TMS notation (origin [0,0] in bottom-left).
+
+	What coordinate conversions do we need for TMS Global Mercator tiles::
+
+	     LatLon      <->       Meters      <->     Pixels    <->       Tile     
+
+	 WGS84 coordinates   Spherical Mercator  Pixels in pyramid  Tiles in pyramid
+	     lat/lon            XY in metres     XY pixels Z zoom      XYZ from TMS 
+	    EPSG:4326           EPSG:900913                                         
+	     .----.              ---------               --                TMS      
+	    /      \     <->     |       |     <->     /----/    <->      Google    
+	    \      /             |       |           /--------/          QuadTree   
+	     -----               ---------         /------------/                   
+	   KML, public         WebMapService         Web Clients      TileMapService
+```
 
 
 ****

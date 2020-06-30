@@ -80,7 +80,7 @@ class Vector(Raster):
                 "# -------------------------------- DEFINE DONE ------------------------------- #")
 
         else:
-            print("# ----- \033[1:37m Warning: Class SHP Init without shapefile \033[0m")
+            print("# ----- \033[1:31m Warning: Class SHP Init without shapefile \033[0m")
 
     def getDefaultLayerbyName(self, name):
         """
