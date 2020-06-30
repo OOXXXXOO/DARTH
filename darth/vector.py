@@ -1,5 +1,4 @@
 import sys
-# from Raster import Raster
 from .raster import Raster
 import ogr
 import os
