@@ -14,25 +14,25 @@
 
 
 
+#### Requirement:
+
+##### **After my test installation, i recommand you install 'GDAL'& 'OPENCV' with conda/miniconda first not pip.** 
+```bash
+conda install gdal opencv
+```
+
+
+#### install package
 ```bash
 pip install d-arth
 ```
 
 #### Addition Huawei OBS Server Package (Optional)
-**After version 0.0.3, the process will install OBS package automatically.**
+**After version 0.0.3, the process will install OBS package automatically. So we don't need install manually**
 
 ```bash
 cd obs-src
 python setup.py install
-```
-#### Requirement:
-
-**After my test installation, i recommand you install 'GDAL' with conda/miniconda first not pip.** 
-
-if you want see the detail of requirements or install that manually:
-
-```bash
-pip install -f requirement.txt
 ```
 
 ## Useage:

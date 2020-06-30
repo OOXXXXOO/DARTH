@@ -22,7 +22,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="d-arth", # Replace with your own username
-    version="0.0.6",
+    version="0.0.7",
     author="Winshare Tom",
     author_email="tanwenxuan@live.com",
     description="The Satellite Imagery DataSet Toolkit",
@@ -39,7 +39,7 @@ setuptools.setup(
         "certifi==2020.6.20",
         "decorating==0.6.1",
         "esdk-obs-python==3.20.1",
-        "GDAL==3.1.0",
+        "GDAL",
         "numpy",
         "olefile==0.46",
         "Pillow==7.1.2",
