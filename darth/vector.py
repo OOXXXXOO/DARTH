@@ -8,8 +8,7 @@ import numpy as np
 from tqdm import tqdm
 import json
 import multiprocessing
-__version__ = '3.5.0'
-PY2 = sys.version_info[0] == 2
+
 
 
 class Vector(Raster):
@@ -65,12 +64,6 @@ class Vector(Raster):
                     self.Layer.GetGeometryColumn())
                 self.LayerDict[self.Layer.GetName()] = self.Layer
             
-            
-            # print("# ---------------------------- Layer dict by name ---------------------------- #")
-
-            # self.print_dict(self.LayerDict)
-
-            # print("# ---------------------------- Layer dict by name ---------------------------- #")
             
             self.Srs = self.Layer.GetSpatialRef()
             self.Extent=self.Layer.GetExtent()
@@ -213,98 +206,6 @@ class Vector(Raster):
         if n!=0:
             print('\t'*(n-1)+ '}')
     
-    # def Shp2LabelmeJson(self, output_GeoJson=True,
-    #                     Labelme_Json_path='./Segmentation/',
-    #                     invert2Voc=True, FieldClassName='TYPE'):
-    #     """
-    #     invert the Shapefile to labelme_Json
-    #     Flow I  : Read Tif & Shapefile -> Dataset & DataSource
-    #     Flow II : Init Null labelme_json dict
-    #     Flow III: Get Cords(x,y) & Feature and invert longtitude,latitude to image cols,rows
-    #     Flow IV : Append image Cords list to dict
-    #     Flow V  : Output Labelme Json
-    #     Flow VI : Use System Command labelme_json_to_dataset / labelme2voc.py
-    #             # It generates:
-    #             #   - data_dataset_voc/JPEGImages
-    #             #   - data_dataset_voc/SegmentationClass
-    #             #   - data_dataset_voc/SegmentationClassVisualization
-    #     :param shp_path:
-    #     :param tif_path:
-    #     :param Labelme_Json_path: Output Json&jpg path
-    #     :param invert2Dataset: invert labelme json to Dataset
-    #     :param  TYPE like (['Storge yard', 'Container', 'Oil Tank', 'Berth'])
-    #     :return:
-    #     """
-
-    #     print('-----feature count :', self.Layer.GetFeatureCount())
-    #     print("-----SpatialFilter :", self.Layer.GetSpatialFilter())
-
-    #     print("-----", self.Layer.GetLayerDefn())
-
-    #     print("-----", self.Layer.GetFeatureCount())
-
-    #     print("-----", self.Layer.GetExtent())
-
-    #     x1, y1, x2, y2 = self.Layer.GetExtent()
-    #     x1, y1 = self.geo2imagexy(x1, y1)
-    #     x2, y2 = self.geo2imagexy(x2, y2)
-    #     print("-----Image:", x1, y1, x2, y2)
-    #     width = abs(x2 - x1)
-    #     height = abs(y2 - y1)
-    #     print("-----Whole Image shape:", height, width)
-
-    #     print('-----', self.Layer[0])
-
-    #     print("-----", self.Layer.GetSpatialRef())
-    #     exit(0)
-
-    #     # for i in tqdm(range(self.Layer.GetFeatureCount())):
-    #     #     in_Feature = self.Layer.GetFeature(i)
-    #     #     geom = in_Feature.GetGeometryRef()
-    #     #     print(type(geom))
-    #     #     print(geom)
-    #     # FieldValue=in_Feature.GetField(FieldClassName)
-    #     # geodict=geom.ExportToJson()
-    #     # geodict=
-
-    #     # geodict=json.loads(geodict)
-
-    #     # feature=self.initcordarrary(self.TYPE[FieldValue],imagecord)
-
-    #     # shapes.append(feature)
-    #     # print('\n\nshape is :',shapes,' process done \n\n')
-    #     # return 0
-    #     ####################################################################
-    #     # shapes process done
-    #     if(not os.path.exists(Labelme_Json_path)):
-    #         os.system('mkdir ' + Labelme_Json_path)
-    #     filename = filename.split('.')[-2]
-    #     self.LabelmeJsonPath = Labelme_Json_path
-    #     outputjsonname = Labelme_Json_path + filename + '.json'
-    #     self.save(outputjsonname, shapes, filename + '.jpg', imageData=None,
-    #               lineColor=(255, 0, 0, 128), fillColor=(0, 255, 0, 128))
-
-    #     Newim = Image.fromarray(self.tif.image_nparray)
-    #     Newim.save(Labelme_Json_path + filename + '.jpg')
-    #     print('\n\n****json   &   image save done *****\n\n')
-
-    #     if output_GeoJson:
-    #         geojsonfilename = self.Input_path + '.geojson'
-    #         formattransfrom_command = 'ogr2ogr -f GeoJSON ' + \
-    #             geojsonfilename + ' ' + self.Input_path
-    #         print(formattransfrom_command)
-    #         os.system(formattransfrom_command)
-    #         print(' output geojson transfrom done ')
-
-    #     if invert2Voc:
-    #         self.Json2Voclike()
-
-    #         # command='labelme_json_to_dataset '+outputjsonname
-    #         # os.system(command)
-    #     #
-    #     # if invertPascalVoc:
-    #     #     imageDataPIL.save(Labelme_Json_path+filename+'.jpg')
-
     def Rasterize(self, outputname, Nodata=0):
 
         targetDataSet = gdal.GetDriverByName('GTiff').Create(
@@ -337,16 +238,6 @@ class Vector(Raster):
             self.labellist.append(path)
             self.Rasterize(path)
         return self.labellist
-
-
-
-
-
-
-
-
-
-
     
     def reset_layer(self):
         self.Layer.ResetReading()
@@ -444,7 +335,99 @@ class Vector(Raster):
     #                 lbl, img, class_names, colormap=colormap)
     #             PIL.Image.fromarray(viz).save(out_viz_file)
 
+   # def Shp2LabelmeJson(self, output_GeoJson=True,
+    #                     Labelme_Json_path='./Segmentation/',
+    #                     invert2Voc=True, FieldClassName='TYPE'):
+    #     """
+    #     invert the Shapefile to labelme_Json
+    #     Flow I  : Read Tif & Shapefile -> Dataset & DataSource
+    #     Flow II : Init Null labelme_json dict
+    #     Flow III: Get Cords(x,y) & Feature and invert longtitude,latitude to image cols,rows
+    #     Flow IV : Append image Cords list to dict
+    #     Flow V  : Output Labelme Json
+    #     Flow VI : Use System Command labelme_json_to_dataset / labelme2voc.py
+    #             # It generates:
+    #             #   - data_dataset_voc/JPEGImages
+    #             #   - data_dataset_voc/SegmentationClass
+    #             #   - data_dataset_voc/SegmentationClassVisualization
+    #     :param shp_path:
+    #     :param tif_path:
+    #     :param Labelme_Json_path: Output Json&jpg path
+    #     :param invert2Dataset: invert labelme json to Dataset
+    #     :param  TYPE like (['Storge yard', 'Container', 'Oil Tank', 'Berth'])
+    #     :return:
+    #     """
 
+    #     print('-----feature count :', self.Layer.GetFeatureCount())
+    #     print("-----SpatialFilter :", self.Layer.GetSpatialFilter())
+
+    #     print("-----", self.Layer.GetLayerDefn())
+
+    #     print("-----", self.Layer.GetFeatureCount())
+
+    #     print("-----", self.Layer.GetExtent())
+
+    #     x1, y1, x2, y2 = self.Layer.GetExtent()
+    #     x1, y1 = self.geo2imagexy(x1, y1)
+    #     x2, y2 = self.geo2imagexy(x2, y2)
+    #     print("-----Image:", x1, y1, x2, y2)
+    #     width = abs(x2 - x1)
+    #     height = abs(y2 - y1)
+    #     print("-----Whole Image shape:", height, width)
+
+    #     print('-----', self.Layer[0])
+
+    #     print("-----", self.Layer.GetSpatialRef())
+    #     exit(0)
+
+    #     # for i in tqdm(range(self.Layer.GetFeatureCount())):
+    #     #     in_Feature = self.Layer.GetFeature(i)
+    #     #     geom = in_Feature.GetGeometryRef()
+    #     #     print(type(geom))
+    #     #     print(geom)
+    #     # FieldValue=in_Feature.GetField(FieldClassName)
+    #     # geodict=geom.ExportToJson()
+    #     # geodict=
+
+    #     # geodict=json.loads(geodict)
+
+    #     # feature=self.initcordarrary(self.TYPE[FieldValue],imagecord)
+
+    #     # shapes.append(feature)
+    #     # print('\n\nshape is :',shapes,' process done \n\n')
+    #     # return 0
+    #     ####################################################################
+    #     # shapes process done
+    #     if(not os.path.exists(Labelme_Json_path)):
+    #         os.system('mkdir ' + Labelme_Json_path)
+    #     filename = filename.split('.')[-2]
+    #     self.LabelmeJsonPath = Labelme_Json_path
+    #     outputjsonname = Labelme_Json_path + filename + '.json'
+    #     self.save(outputjsonname, shapes, filename + '.jpg', imageData=None,
+    #               lineColor=(255, 0, 0, 128), fillColor=(0, 255, 0, 128))
+
+    #     Newim = Image.fromarray(self.tif.image_nparray)
+    #     Newim.save(Labelme_Json_path + filename + '.jpg')
+    #     print('\n\n****json   &   image save done *****\n\n')
+
+    #     if output_GeoJson:
+    #         geojsonfilename = self.Input_path + '.geojson'
+    #         formattransfrom_command = 'ogr2ogr -f GeoJSON ' + \
+    #             geojsonfilename + ' ' + self.Input_path
+    #         print(formattransfrom_command)
+    #         os.system(formattransfrom_command)
+    #         print(' output geojson transfrom done ')
+
+    #     if invert2Voc:
+    #         self.Json2Voclike()
+
+    #         # command='labelme_json_to_dataset '+outputjsonname
+    #         # os.system(command)
+    #     #
+    #     # if invertPascalVoc:
+    #     #     imageDataPIL.save(Labelme_Json_path+filename+'.jpg')
+
+ 
 def main():
     Vector = SHP("/workspace/data/Water/Beijing.geojson")
     # Vector=SHP("/workspace/SQCV/Data/IO/waterchina.geojson")

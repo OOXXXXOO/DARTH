@@ -288,22 +288,6 @@ def merge_tiles(datas, x1, y1, x2, y2, z):
     return outpic
 
 
-# def download_tiles(urls, multi=8):
-#     url_len = len(urls)
-#     datas = [None] * url_len
-#     if multi < 1 or multi > 20 or not isinstance(multi, int):
-#         raise Exception(
-#             "multi of urloader shuold be int and between 1 to 20.")
-#     tasks = [urloader(i, multi, urls, datas) for i in range(multi)]
-#     for i in tasks:
-#         i.start()
-
-#     for i in tasks:
-#         i.join()
-
-#     # print(multiprocessing.current_process())
-#     print("-----Buffer DataSize:", sys.getsizeof(datas))
-#     return datas
 
 def download_tiles(url):
     data=[None]
