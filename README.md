@@ -42,7 +42,7 @@ python setup.py install
 
 
 The Satellite Imagery DataSet is important part to train, validation the model of different mission. 
-This toolkit work for download different datasources and use specific layer (class) in [OSM Vector Data](https://openmaptiles.com/downloads/planet/) to generate dataset for train or validation model.
+This toolkit work for download different datasources and use specific layer (class) in [OSM Vector Data](https://openmaptiles.com/downloads/planet/)(or other vector file) to generate dataset for train or validation model.
 
 ### Support Vector Datasource type:
 
