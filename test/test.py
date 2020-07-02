@@ -1,7 +1,7 @@
-ak='ISSSVUVTXQWXSCPKR23N'
-sk='IYZbHMxJss3vXsoi9pqArIySf205lPcoISmm6ReJ'
+ak='XXXXX'
+sk='XXXXXXXX'
 server='http://obs.cn-north-4.myhuaweicloud.com'
-bucketname="obs-tq-dataset"
+bucketname="XXXXXX"
 
 
 vector="/workspace/osm-2017-07-03-v3.6.1-china_beijing.mbtiles"
