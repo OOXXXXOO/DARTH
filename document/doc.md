@@ -13,9 +13,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-![](hansen_tree_cover.png)
+![](./../document/darth-01.png)
 # Document 
-
 - [Document](#document)
   - [`Raster`](#raster)
     - [`readtif(tif_file_path)`](#readtiftif_file_path)
@@ -35,26 +34,17 @@
   - [`Vector`](#vector)
     - [`readshp(input_shp_path)`](#readshpinput_shp_path)
     - [`getDefaultLayerbyName(name)`](#getdefaultlayerbynamename)
-    - [getbounding](#getbounding)
-    - [SaveVectorByLayerName](#savevectorbylayername)
-    - [Rasterize](#rasterize)
-    - [generate](#generate)
-    - [reset_layer](#reset_layer)
+    - [`getbounding`](#getbounding)
+    - [`SaveVectorByLayerName()`](#savevectorbylayername)
+    - [`Rasterize`](#rasterize)
+    - [`generate`](#generate)
+    - [`reset_layer`](#reset_layer)
   - [`downloader`](#downloader)
-    - [add_cord](#add_cord)
-    - [download](#download)
-    - [merge](#merge)
-  - [process](#process)
-  - [OBS(Optional)](#obsoptional)
-    - [bucket](#bucket)
-      - [getBucketMetadata](#getbucketmetadata)
-      - [upload](#upload)
-      - [download](#download-1)
-      - [cd](#cd)
-      - [delete](#delete)
-      - [ls](#ls)
-    - [QGIS Map Resources Script:](#qgis-map-resources-script)
-
+    - [`add_cord`](#add_cord)
+    - [`download`](#download)
+    - [`merge`](#merge)
+  - [`process`](#process)
+  - [QGIS Map Resources Script:](#qgis-map-resources-script)
 
 ## `Raster`
 Tagged Image File Format, abbreviated TIFF or TIF, is a computer file format for storing raster graphics images, popular among graphic artists, the publishing industry,[1] and photographers. TIFF is widely supported by scanning, faxing, word processing, optical character recognition, image manipulation, desktop publishing, and page-layout applications.[2] The format was created by Aldus Corporation for use in desktop publishing. It published the latest version 6.0 in 1992, subsequently updated with an Adobe Systems copyright after the latter acquired Aldus in 1994.
@@ -191,13 +181,13 @@ eg:
 v.getDefaultLayerbyName("building")
 ```
 
-### getbounding
+### `getbounding`
 get vector file bounding box cord
 ```python
 bounding=v.getbounding()
 ```
 
-### SaveVectorByLayerName
+### `SaveVectorByLayerName()`
 `SaveVectorByLayerName(LayerName, outputname, format="GeoJSON")`
 This function could be save the one layer of multi-layer vector object .
 ```python
@@ -206,14 +196,14 @@ v.SaveVectorByLayerName("building","building.shp"):
 
 
 
-### Rasterize
+### `Rasterize`
 `Rasterize(outputname, Nodata=0)`
 map the vector layer with raster dataset and generate rasterized vector file.
 Tips :
 this function just read defaultlayer ,so must set default layer first.
 
 
-### generate
+### `generate`
 `generate(tiles,output_path="./label"):`
 * tiles       :        list of tif file paths
 * output_path :        dir of target output
@@ -222,7 +212,7 @@ this function just read defaultlayer ,so must set default layer first.
 v.generate(tiles)
 ```
 
-### reset_layer
+### `reset_layer`
 
 reset the default layer & all layer option
 ```python
@@ -281,7 +271,7 @@ At this time, we use the OSM standard to support datasource list:
 
 
 
-### add_cord
+### `add_cord`
 ` add_cord(self, left, top, right, bottom, zoom, style='s'):`
 
 Compute the Extent by `(x1,y1,x2,y2)`-Retangle coordinate A
@@ -306,29 +296,46 @@ Compute the Extent by `(x1,y1,x2,y2)`-Retangle coordinate A
 ```
 
 
-### download
+### `download`
 `download(output_path="./images")`
 download the file to `output_path`
 
 
-### merge
+### `merge`
 
 Merge the all file to single file or not
 ```python
 Google.merge()
 ```
-## process
+## `process`
 
-`Process(VectorDataSource,WgsCord,Class_key,DataSourcesType='Google China',DataSetName="DataSet",Remote_dataset_root="DataSets/",Thread_count=2,Nodata=0,Merge=False,Keep_local=True,Over_write=True,Upload=False,**args)`
+```python
+Process(
+    vector,
+    cord,
+    class_key,
+    DataSourcesType='Google China',
+    DataSetName="DataSet",
+    Remote_dataset_root="DataSets/",
+    Thread_count=2,
+    Nodata=0,
+    Merge=False,
+    Keep_local=True,
+    Over_write=True,
+    Upload=False,
+    **args
+    )
+```
 
-* `vector`       : local path of vector object
-* `cord`         : WGS Standard Cord (min-lon,min-lat,max-lon,maxlat,zoom_level)
-* `class_key`    : The class you need generate
-* `Datasource`   : Map production datasource name
-* `Merge`        : Merge the tiles file to whole file or not
-* `Keep_local`   : The last step will delete local cache ,this option could choose to save it.
-* `upload`       : Use Network Strong Server or not (Just support [Huawei OBS server](https://developer.huaweicloud.com/sdk?OBS) now)
-* `thread`       : download thread count
+* `vector`              : local path of vector object
+* `cord`                : WGS Standard Cord (min-lon,min-lat,max-lon,maxlat,zoom_level)
+* `class_key`           : The class you need generate
+* `DataSourcesType`     : Map production datasource name
+* `Merge`               : Merge the tiles file to whole file or not
+* `Keep_local`          : The last step will delete local cache ,this option could choose to save it.
+* `Upload`              : Use Network Strong Server or not (Just support [Huawei OBS server](https://developer.huaweicloud.com/sdk?OBS) now)
+* `Thread_count`        : download thread count
+* `Over_write`          : overwrite remote files or not
 
 * args:
     for obs server:
@@ -365,7 +372,7 @@ Google.merge()
 
 
 
-
+<!-- 
 
 ## OBS(Optional) 
 
@@ -381,9 +388,9 @@ Google.merge()
 
 #### delete
 
-#### ls
+#### ls -->
 
-### QGIS Map Resources Script:
+## QGIS Map Resources Script:
 
 ```python
 
@@ -462,3 +469,21 @@ iface.reloadConnections()
 
 
 ```
+
+
+
+Copyright 2020 Tom Winshare
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+![](./darth-03.png)

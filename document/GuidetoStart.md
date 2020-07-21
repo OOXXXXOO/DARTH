@@ -1,4 +1,4 @@
-![](hansen_tree_cover.png)
+![](./../document/darth-01.png)
 # Guide to Start
 
 This demo work for generate dataset quickly.
@@ -274,10 +274,10 @@ Process(
     # ---------------------------------------------------------------------------- #
     #                                Bucket ToolKit                                #
     # ---------------------------------------------------------------------------- #
-    # ----access key (AK) :  ISSSVUVTXQWXSCPKR23N
-    # ----secret key (SK):  IYZbHMxJss3vXsoi9pqArIySf205lPcoISmm6ReJ
+    # ----access key (AK) : XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    # ----secret key (SK):  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     # ----server :  http://obs.cn-north-4.myhuaweicloud.com
-    # ----bucket name :  obs-tq-dataset
+    # ----bucket name :  XXXXXXXXXXXXXXXXXXXX
     # ----root :  /
     # ---------------------------------------------------------------------------- #
     # ---------------------------------------------------------------------------- #
@@ -473,7 +473,17 @@ In addition, you not only could choose keep local dataset or not, but also read 
 
 ```
 
+Copyright 2020 Tom Winshare
 
-```python
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-```
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+![](./darth-03.png)
