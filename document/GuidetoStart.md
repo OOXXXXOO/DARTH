@@ -3,7 +3,7 @@
 
 This demo work for generate dataset quickly.
 ```python
-from process import Process
+from darth.process import Process
 
 vector="/workspace/osm-2017-07-03-v3.6.1-china_beijing.mbtiles"
 cord=(116.5, 39.9, 116.6, 39.8, 14)
@@ -259,7 +259,7 @@ Process(
     # ---------------------------------------------------------------------------- #
     #                                     DARTH                                    #
     # ---------------------------------------------------------------------------- #
-    # ===== Bucket para preview {'ak': 'ISSSVUVTXQWXSCPKR23N', 'sk': 'IYZbHMxJss3vXsoi9pqArIySf205lPcoISmm6ReJ', 'server': 'http://obs.cn-north-4.myhuaweicloud.com', 'bn': 'obs-tq-dataset'}
+    # ===== Bucket para preview {'ak': 'XXXXXXX', 'sk': 'XXXXXXXXXXX', 'server': 'http://obs.cn-north-4.myhuaweicloud.com', 'bn': 'obs-tq-dataset'}
     
     
     
