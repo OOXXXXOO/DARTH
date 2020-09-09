@@ -38,10 +38,8 @@ from tqdm import tqdm
 
 # -------------------------------- Custom Lib -------------------------------- #
 import urllib.request as ur
-from .subscription import MAP_URLS,Tilesize
+from .subscription import MAP_URLS,Tilesize,AGENT
 from .transform import getExtent,wgs_to_tile,TileXYToQuadKey,saveTiff,wgs_to_mercator
-
-
 
 
 
@@ -128,9 +126,7 @@ class downloader(Thread):
         t_start = time.time()
         instance=urls_queue.get()
         url=instance["url"]
-        HEADERS = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.76 Safari/537.36'
-            }
+        HEADERS = {'User-Agent': AGENT}
         header = ur.Request(url, headers=HEADERS)
         err = 0
         while(err < 3):
@@ -314,13 +310,13 @@ def main():
     Google=downloader("Google Satellite")
     Google.add_cord(116.3, 39.9, 116.6, 39.7, 13)#WGS Form
     Google.download()
-    Google.merge()
-    tiles=[i["path"] for i in Google.result]
-    from vector import Vector
-    Building=Vector('/home/winshare/Downloads/2017-07-03_asia_china.mbtiles')
-    Building.getDefaultLayerbyName("building")  
-    Building.crop_default_layer_by_rect(Google.mercator_cord)#FILTER to speed up
-    Building.generate(tiles)
+    # Google.merge()
+    # tiles=[i["path"] for i in Google.result]
+    # from vector import Vector
+    # Building=Vector('/home/winshare/Downloads/2017-07-03_asia_china.mbtiles')
+    # Building.getDefaultLayerbyName("building")  
+    # Building.crop_default_layer_by_rect(Google.mercator_cord)#FILTER to speed up
+    # Building.generate(tiles)
 
 
 

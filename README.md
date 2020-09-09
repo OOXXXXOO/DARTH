@@ -8,6 +8,8 @@
 ## **The Satellite Imagery DataSet Toolkit**
 
 
+Version 0.0.9 fix HTTP Header bug for request url of Google mt1-mt6 resources.
+
 ## Install
 
 
