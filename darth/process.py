@@ -59,11 +59,11 @@ def Process(
 
     """
 
-    print("# ---------------------------------------------------------------------------- #")
-    print("#                                     DARTH                                    #")
-    print("# ---------------------------------------------------------------------------- #")
+    print("\033[1;32# ---------------------------------------------------------------------------- #\033[0m")
+    print("\033[1;32#                                     DARTH                                    #\033[0m")
+    print("\033[1;32# ---------------------------------------------------------------------------- #\033[0m")
 
-    print("# ===== Bucket para preview %s"%args)
+    print("# ===== Bucket para preview\033[1;32 %s\033[0m"%args)
 
 
     
@@ -104,8 +104,8 @@ def Process(
 
     image_dir=os.path.join(DataSetName,'images/')
     targets_dir=os.path.join(DataSetName,'targets/')
-    print("# ===== imagery dir :",image_dir)
-    print("# ===== targets dir :",targets_dir)
+    print("# ===== imagery dir :\033[1;32%s\033[0m"%image_dir)
+    print("# ===== targets dir :\033[1;32%s\033[0m"%targets_dir)
     if not os.path.exists("./"+DataSetName):
         os.makedirs(image_dir)
         os.makedirs(targets_dir)
@@ -128,14 +128,14 @@ def Process(
         bucket_targets_root=os.path.join(Remote_dataset_root,targets_dir)
         bucket_description_root=os.path.join(Remote_dataset_root,DataSetName+"/")
             
-        print("# ===== Bucket imagery root  :",bucket_imagery_root)
-        print("# ===== Bucket Targets root  :",bucket_targets_root)
-        print("# ===== Bucket Description root :",bucket_description_root)
+        print("# ===== Bucket imagery root  :\033[1;32%s\033[0m",bucket_imagery_root)
+        print("# ===== Bucket Targets root  :\033[1;32%s\033[0m",bucket_targets_root)
+        print("# ===== Bucket Description root :\033[1;32%s\033[0m",bucket_description_root)
         
         Bucket.cd("DataSets")
         Bucket.ls()
     
-    print("# ===== Start Downloading.....")
+    print("\033[5;36# ===== Start Downloading.....\033[0m")
     Download.download(output_path=image_dir)
     tiles=[i["path"] for i in Download.result]
     Vec.generate(tiles,output_path=targets_dir)
@@ -146,7 +146,7 @@ def Process(
         print("\n\n\n# ---------------------------------------------------------------------------- #")
         print("# ---------------------------------- Step IV --------------------------------- #")
         print("# ---------------------------------------------------------------------------- #")
-        print("# ===== Upload dataset meta",remote_metaname)
+        print("# ===== Upload dataset meta\033[1;32%s\033[0m"%remote_metaname)
 
         Bucket.upload(
             remote_path=remote_metaname,
@@ -155,7 +155,7 @@ def Process(
             
         ## Saveing index json file
         remote_json_path=os.path.join(bucket_description_root,Download.json_path.split('/')[-1])
-        print("# ===== Upload dataset description",remote_json_path)
+        print("# ===== Upload dataset description\033[1;32%s\033[0m"%remote_json_path)
         if not Over_write:
             Bucket.check(remote_json_path)
         

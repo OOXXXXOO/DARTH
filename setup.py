@@ -22,7 +22,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="d-arth", # Replace with your own username
-    version="0.0.9",
+    version="0.1.0",
     author="Winshare Tom",
     author_email="tanwenxuan@live.com",
     description="The Satellite Imagery DataSet Toolkit",

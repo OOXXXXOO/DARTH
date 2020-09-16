@@ -6,43 +6,37 @@
 
 ****
 ## **The Satellite Imagery DataSet Toolkit**
+### Useage:
+|[Guide to Start](document/GuidetoStart.md)|[Document](document/doc.md)|[Related Artical](https://zhuanlan.zhihu.com/p/152167454)|
+|:---:|:---:|:---:|
 
 
-Version 0.0.9 fix HTTP Header bug for request url of Google mt1-mt6 resources.
 
-## Install
+**The Satellite Imagery DataSet** is an important part to train, validate the deep learning model of different missions in modern GIS science. 
+
+This toolkit work for download different data sources and use specific layer (class) in [OSM Vector Data](https://openmaptiles.com/downloads/planet/) (or other vector file)  to generate dataset for train or validation model.
+
+
+
+
+### Install
 
 
 #### Requirement:
 
-##### **After my test installation, i recommand you install 'GDAL'& 'OPENCV' with conda/miniconda first not pip.** 
+##### **Install GDAL by Anaconda/MiniConda not pip** 
 ```bash
-conda install gdal opencv
+conda install gdal
 ```
 
 
-#### install package
+##### install package
 ```bash
 pip install d-arth
 ```
 
-#### Addition Huawei OBS Server Package (Optional)
-**After version 0.0.3, the process will install OBS package automatically. So we don't need install manually**
-
-```bash
-cd obs-src
-python setup.py install
-```
-
-## Useage:
-|[Guide to Start](document/GuidetoStart.md)|[Document](document/doc.md)|
-|:---:|:---:|
-
-
-
-The Satellite Imagery DataSet is an important part to train, validate the deep learning model of different missions in modern GIS science. 
-
-This toolkit work for download different datasources and use specific layer (class) in [OSM Vector Data](https://openmaptiles.com/downloads/planet/)(or other vector file) to generate dataset for train or validation model.
+##### Additional: Huawei OBS Server Package (Optional)
+After version 0.0.3, the process will install OBS package automatically. The Azure & Amazon Service will support in beta version, **if it is necessary**. So we don't need to install related package manually.
 
 ### Support Vector Datasource type:
 
@@ -91,7 +85,7 @@ First of all , the layer name & class should be know as prior knowledge that mea
    * CartoDb Positron,
    * Bing VirtualEarth
    
-### Usage:
+### Tutorial:
 #### Step 1:
 Download the tile file is the first step. But the almost data resources supporter didn't write the projection information to tile file. So the compute tile projection infomation & write to file is most import part in process of download flow.
 
@@ -120,7 +114,8 @@ Google=downloader("Google Satellite")
 ### Demo:
 We could choose a position like the Saltlake city, Utah states.
 
-Salt Lake City is located in United States country, in North America continent (or region). DMS latitude longitude coordinates for Salt Lake City are: *40°45'38.81"N, 111°53'27.78"W.*
+Salt Lake City is located in United States country, in North America continent (or region). DMS latitude longitude coordinates for Salt Lake City are: 
+> *40°45'38.81"N, 111°53'27.78"W.*
 
 * Latitude position: 
 Equator ⇐ 4532km (2816mi) ⇐ Salt Lake City ⇒ 5475km (3402mi) ⇒ North pole.
@@ -386,15 +381,30 @@ plt.imshow(label),plt.show()
 ![png](document/output_9_1.png)
 
 
+### update log：
+
+* Version 0.1.0 change the CLI UI & cancle the opencv requirement to simplify the install operation.
+
+
+* Version 0.0.9 Fix HTTP header bug for request url of Google mt1-mt6 resources.
+
+* Version 0.0.7 GDAL version limit is not friendly for user ,so i cancel the GDAL version require
+
+
+* Version 0.0.6 fix license problem & call problem the root call function has been turn back to low case
+
+
+* Version 0.0.3 Test Sucessful & Package Could be download  & install huawei obs server automatically
+
 
 ****
 
 
 
-Neural Network for GIS , let's fuck!
+#### Neural Network for GIS , let's fuck!
 
 
-Copyright 2020 Tom Winshare
+**Copyright 2020 Tom Winshare**
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

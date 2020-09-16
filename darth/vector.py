@@ -35,30 +35,30 @@ class Vector(Raster):
                 'mbtiles': ogr.GetDriverByName('MBTiles')
             }
             if filetype in self.DriveDict.keys():
-                print("# -----Valid vector format :", filetype)
+                print("\033[0m# -----Valid vector format :\033[1;32m ", filetype)
                 self.Driver = self.DriveDict[filetype]
 
             self.Input_path = input_shp_path
             self.DataSource = self.Driver.Open(self.Input_path)
             self.meta = self.DataSource.GetMetadata()
             
-            print("\n# ----------------------------- Meta Information ----------------------------- #")
+            print("\n\033[0m# ----------------------------- Meta Information ----------------------------- #")
             self.print_dict(self.meta)
 
             print("# ----------------------------- Meta Information ----------------------------- #\n")
             self.Description = self.DataSource.GetDescription()
-            print('# -----Description : ', self.Description)
+            print('\033[0m# -----Description :\033[1;32m ', self.Description)
             assert self.DataSource is not None, '\n\n\nERROR-----' + \
                 str(input_shp_path) + '  --- Invalid Input Shepefile\n\n\n'
             self.LayerCount = self.DataSource.GetLayerCount()
-            print("# -----LayerCount:", self.LayerCount)
+            print("\033[0m# -----LayerCount\033[1;32m :", self.LayerCount)
             self.LayerDict = {}
             for i in range(self.LayerCount):
                 self.Layer = self.DataSource.GetLayer(i)
                 print(
-                    "# -----Layer :",
+                    "\033[0m# -----Layer :\033[1;34m ",
                     i,
-                    " LayerName : ",
+                    "\033[0m LayerName : \033[1;32m ",
                     self.Layer.GetName(),
                     self.Layer.GetGeometryColumn())
                 self.LayerDict[self.Layer.GetName()] = self.Layer
@@ -66,20 +66,20 @@ class Vector(Raster):
             
             self.Srs = self.Layer.GetSpatialRef()
             self.Extent=self.Layer.GetExtent()
-            print("# -----Extent:",self.Extent)
-            print("# -----Alread Load:", input_shp_path)
+            print("\033[0m# -----Extent:\033[1;32m ",self.Extent)
+            print("\033[0m# -----Alread Load:\033[1;32m ", input_shp_path,"\033[0m")
             print(
                 "# -------------------------------- DEFINE DONE ------------------------------- #")
 
         else:
-            print("# ----- \033[1:31m Warning: Class SHP Init without shapefile \033[0m")
+            print("# ----- \033[5;31m Warning: Vector Class init with wrong path or invalid vector file \nPath:",input_shp_path,"\033[0m\n")
 
     def getDefaultLayerbyName(self, name):
         """
         para:name string of layer name
         """
         self.defaultlayer = self.LayerDict[name]
-        print("# -----Set Default Layer |",name,"| : ",self.defaultlayer)
+        print("# -----Set Default Layer \033[1;32m|",name,"| : \033[0m",self.defaultlayer)
         return self.LayerDict[name]
 
     def Info(self):
@@ -185,11 +185,11 @@ class Vector(Raster):
 
     
     def crop_default_layer_by_rect(self, rect):
-        print("# -----Set filter Rect:",rect)
+        print("# -----Set filter Rect:\033[1;32m",rect,'\033[0m')
         self.defaultlayer.SetSpatialFilterRect(*rect)
     
     def print_dict(self,d,n=0):
-        length=69
+        length=67
         for k,v in d.items():
             # print ('\t'*n)
             if type(v)==type({}):
@@ -201,7 +201,7 @@ class Vector(Raster):
                 space=length-strl
                 if strl>length:                    
                     v=str(v)[:space]
-                print("# -----%s : %s" % (k,v)+" "*space+"#")
+                print("\033[0m# -----\033[1;34m %s :\033[1;32m  %s\033[0m" % (k,v)+" "*space+"#")
         if n!=0:
             print('\t'*(n-1)+ '}')
     
@@ -222,7 +222,7 @@ class Vector(Raster):
         targetDataSet = None
         
     def generate(self,tiles,output_path="./label"):
-        print('# ===== Start Generate.....')
+        print('# ===== \033[5;33mStart Generate.....\033[0m')
         """
         修订  把Rasterize同样使用线程分解的可能性
         """

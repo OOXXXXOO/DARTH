@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    raster.py                                          :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: winshare <winshare@student.42.fr>          +#+  +:+       +#+         #
+#    By: Tom Winshare <tanwenxuan@live.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/04/20 17:05:30 by winshare          #+#    #+#              #
-#    Updated: 2020/06/30 00:34:59 by winshare         ###   ########.fr        #
+#    Updated: 2020/09/16 18:15:16 by Tom Winshar      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ from osgeo import ogr
 import gdal
 import glob
 import numpy as np
+import PIL.Image as Image
 
 
 class Raster():
@@ -44,7 +45,7 @@ class Raster():
         print("# ---------------------------------------------------------------------------- #")
         print("#                            TIFF process Toolkit                              #")
         print("# ---------------------------------------------------------------------------- #")
-        self.display = display
+        # self.display = display
         self.debug = debug
         self.channel = channel
         if not filename is None:
@@ -154,7 +155,9 @@ class Raster():
     def writeimagery(self, name=None, format="png"):
         if name is None:
             name = self.filename + "_imagery."+format
-        cv2.imwrite(name, self.image)
+        image=Image.fromarray(self.image)
+        # cv2.imwrite(name, self.image)
+        image.save(name)
 
     def writetif(self, outputname,):
         """
@@ -167,18 +170,19 @@ class Raster():
         cv2 resize image data
         6 parameter 1,5 is resolution ratio  its need /resize_ratio
         """
-        size = (int(self.width * resize_ratio),
-                int(self.height * resize_ratio))
-        self.resizedimage = cv2.resize(
-            self.image_nparray, size, interpolation=cv2.INTER_AREA)
-
+        size = (int(self.width * resize_ratio),int(self.height * resize_ratio))
+        image=Image.fromarray(self.image_nparray)
+        image.resize(size,resample=PIL.Image.BILINEAR)
+        # self.resizedimage = cv2.resize(
+        #     self.image_nparray, size, interpolation=cv2.INTER_AREA)
+        self.resizedimage=np.array(image)
         self.ResizeGeo = list(self.geotrans)
         print('input Geo parameter, :', self.ResizeGeo)
         self.ResizeGeo[1] = float(self.ResizeGeo[1] / resize_ratio)
         self.ResizeGeo[5] = float(self.ResizeGeo[5] / resize_ratio)
         print('resized Geo parameter ，：', self.ResizeGeo)
         self.geotrans = tuple(self.ResizeGeo)
-
+    # ready for fix the resize 
     def writethreshold2shp(self):
         """
         Set the Boolmap(ndarray) & do polygonize in boolmap to save

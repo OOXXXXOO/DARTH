@@ -6,7 +6,7 @@ from math import floor, pi, log, tan, atan, exp
 import urllib.request as ur
 import PIL.Image as pil
 import io
-import cv2
+
 import osr
 import multiprocessing
 import time
@@ -196,6 +196,8 @@ def getExtent(x1, y1, x2, y2, z, source="Google China"):
 
 def saveTiff(r, g, b, gt, filePath):
     # print("save:",gt)
+    if type(r)==pil.Image:
+        r,g,b=np.array(r),np.array(g),np.array(b)
     driver = gdal.GetDriverByName('GTiff')
     # Create a 3-band dataset
     outRaster = driver.Create(filePath,

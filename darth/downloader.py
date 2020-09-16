@@ -27,7 +27,7 @@
 # ---------------------------------- STD Lib --------------------------------- #
 
 from threading import Thread
-import cv2
+# import cv2
 import multiprocessing
 import time
 import os
@@ -42,10 +42,23 @@ from .subscription import MAP_URLS,Tilesize,AGENT
 from .transform import getExtent,wgs_to_tile,TileXYToQuadKey,saveTiff,wgs_to_mercator
 
 
+title="""
 
+# ---------------------------------------------------------------------------- #
+# ----------------- \033[5;31m██████╗  █████╗ ██████╗ ████████╗██╗  ██╗ \033[0m---------------- #
+# ----------------- \033[5;32m██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██║  ██║ \033[0m---------------- #
+# ----------------- \033[5;33m██║  ██║███████║██████╔╝   ██║   ███████║ \033[0m---------------- #
+# ----------------- \033[5;34m██║  ██║██╔══██║██╔══██╗   ██║   ██╔══██║ \033[0m---------------- #
+# ----------------- \033[5;35m██████╔╝██║  ██║██║  ██║   ██║   ██║  ██║ \033[0m---------------- #
+# ----------------- \033[5;35m╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ \033[0m---------------- #
+# ---------------------------------------------------------------------------- #
+"""
 
 class downloader(Thread):
     def __init__(self, server=None,thread_count=4,format='tif'):
+
+
+        print(title)
         print("# ---------------------------------------------------------------------------- #")
         print("#                            MAP Production Toolkit                            #")
         print("# ---------------------------------------------------------------------------- #")
@@ -59,7 +72,7 @@ class downloader(Thread):
             lines = 52
             length = len(server)
             space = lines - length
-            print("# ----------------------", server, space * "-", "#")
+            print("# ----------------------\033[5;32m", server, space * "\033[0m-", "#")
             self.server = server
         else:
             self.server = "Google"
@@ -103,8 +116,8 @@ class downloader(Thread):
         self.mercator_cord=(*wgs_to_mercator(left_top_x,left_top_y),*wgs_to_mercator(right_bottom_x,right_bottom_y))
 
 
-        print('# -----WGS BoundingBox:',self.wsg_cord)
-        print("# -----Mercator BoudingBox:",self.mercator_cord)
+        print('# -----WGS BoundingBox: \033[1;32m%s \033[0m'%str(self.wsg_cord))
+        print("# -----Mercator BoudingBox: \033[1;32m%s \033[0m"%str(self.mercator_cord))
         # ------------------------------------ III ----------------------------------- #
 
         self.x_step_point=np.arange(left_top_x,right_bottom_x,self.resolution_x*Tilesize)
@@ -117,7 +130,7 @@ class downloader(Thread):
         for data in self.urls:
             self.urls_queue.put(data)
 
-        print("# -----Url Queue size:",self.urls_queue.qsize())
+        print("# -----Url Queue size: \033[1;32m%s \033[0m"%self.urls_queue.qsize())
 
 
     def downloadurl(self,urls_queue):
@@ -161,16 +174,20 @@ class downloader(Thread):
 
                 if self.format=='png':
                     path+='.png'
-                    cv2.imwrite(path,smallarray)
+                    image=Image.fromarray(smallarray)
+                    image.save(path)
+                    # cv2.imwrite(path,smallarray)
                 if self.format=='tif':
                     path+='.tif'
                     if len(smallarray.shape) == 3:
                         h, w, c = smallarray.shape
                         if c == 3:
-                            r, g, b = cv2.split(smallarray)
+                            image=Image.fromarray(smallarray)
+                            r, g, b = image.split()
                             saveTiff(r, g, b, Proj, path)
                         if c == 4:
-                            r, g, b, a = cv2.split(smallarray)
+                            image=Image.fromarray(smallarray)
+                            r, g, b, a = image.split()
                             saveTiff(r, g, b, Proj, path)
                     if len(smallarray.shape) == 2:
                         saveTiff(
@@ -241,14 +258,14 @@ class downloader(Thread):
         import json
         with open(json_path,"w") as jfp:
             json.dump(tileinfo,jfp)
-            print("\n# ===== Save description done",json_path)
+            print("\n# ===== Save description done\033[1;32m",json_path,"\033[0m")
 
      
     def get_urls(self,x1, y1, x2, y2, z, style):
 
         # ------------------------------- Get url list ------------------------------- #
 
-        print("# -----Total tiles number：{x} X {y}".format(x=self.lenx, y=self.leny))
+        print("# -----Total tiles number：\033[1;32m{x} X {y}\033[0m".format(x=self.lenx, y=self.leny))
         self.urls = [self.get_url(
                 i,
                 j,
@@ -291,7 +308,8 @@ class downloader(Thread):
             output_array.paste(small,(x,y))
 
         output_array=output_array.convert("RGB")
-        r, g, b = cv2.split(np.array(output_array))
+        image=Image.fromarray(np.array(output_array))
+        r, g, b = image.split()
         gt=(
             self.extent['LT'][0],
             (self.extent['RB'][0] - self.extent['LT'][0]) / r.shape[1],
