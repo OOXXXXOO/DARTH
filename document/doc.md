@@ -163,9 +163,9 @@ v.readshp(input_shp_path)
 ### `getDefaultLayerbyName(name)`
 Choose layer name as default layer.
 eg:
+```bash
     # -----Description :  /workspace/osm-2017-07-03-v3.6.1-china_beijing.mbtiles
     # -----LayerCount: 15
-    # -----Layer : 0  LayerName :  water 
     # -----Layer : 1  LayerName :  waterway 
     # -----Layer : 2  LayerName :  landcover 
     # -----Layer : 3  LayerName :  landuse 
@@ -176,7 +176,7 @@ eg:
     # -----Layer : 8  LayerName :  transportation 
     # -----Layer : 9  LayerName :  building 
     # -----Layer : 10  LayerName :  water_name 
-
+```
 ```python
 v.getDefaultLayerbyName("building")
 ```
