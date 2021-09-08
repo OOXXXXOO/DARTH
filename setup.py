@@ -42,7 +42,7 @@ setuptools.setup(
         "GDAL",
         "numpy",
         "olefile==0.46",
-        "Pillow==8.1.1",
+        "Pillow==8.3.2",
         "python-slugify==3.0.3",
         "text-unidecode==1.2",
         "tqdm==4.46.1"
