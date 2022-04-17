@@ -1,14 +1,16 @@
 import sys
 from .raster import Raster
-import ogr
 import os
-import gdal
 import numpy as np
 from tqdm import tqdm
 import json
 import multiprocessing
 
-
+from osgeo import gdal
+from osgeo import ogr
+from osgeo import osr
+from osgeo import gdal_array
+from osgeo import gdalconst
 
 class Vector(Raster):
     def __init__(self, input_shp_path=''):

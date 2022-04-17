@@ -1,7 +1,6 @@
 import multiprocessing
 from tqdm import tqdm
 import os
-import gdal
 
 
 
@@ -9,6 +8,11 @@ from .downloader import downloader
 from .obsclient import bucket
 from .vector import Vector
 
+from osgeo import gdal
+from osgeo import ogr
+from osgeo import osr
+from osgeo import gdal_array
+from osgeo import gdalconst
 
 def Process(
     VectorDataSource,

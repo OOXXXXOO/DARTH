@@ -1,13 +1,13 @@
 import numpy as np
 import math
-import gdal
+
 from math import floor, pi, log, tan, atan, exp
 
 import urllib.request as ur
 import PIL.Image as pil
 import io
 
-import osr
+
 import multiprocessing
 import time
 from tqdm import tqdm
@@ -15,6 +15,11 @@ import os
 import sys
 
 
+from osgeo import gdal
+from osgeo import ogr
+from osgeo import osr
+from osgeo import gdal_array
+from osgeo import gdalconst
 
 # WGS-84 to Web Mercator
 

@@ -27,7 +27,6 @@
 # ---------------------------------- STD Lib --------------------------------- #
 
 from threading import Thread
-# import cv2
 import multiprocessing
 import time
 import os
