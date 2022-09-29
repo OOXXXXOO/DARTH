@@ -1,2 +1,3 @@
 /d_arth.egg-info
 /dist
+*.pyc

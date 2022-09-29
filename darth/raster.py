@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    raster.py                                          :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: Tom Winshare <tanwenxuan@live.com>         +#+  +:+       +#+         #
+#    By: tanwenxuan <tanwenxuan@didiglobal.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/04/20 17:05:30 by winshare          #+#    #+#              #
-#    Updated: 2020/09/16 18:15:16 by Tom Winshar      ###   ########.fr        #
+#    Updated: 2022/09/30 01:26:48 by tanwenxuan       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,17 +30,21 @@ import os
 from osgeo import gdal
 from osgeo import osr
 from osgeo import ogr
-import gdal
+# import gdal
 import glob
 import numpy as np
 import PIL.Image as Image
-
+import matplotlib.pyplot as plt
 
 class Raster():
     def __init__(self, filename=None, channel=[
-                 0, 1, 2], debug=False):
-        """
-        filename: could be filedir or path of single file
+                 0], debug=False):
+        """_summary_
+
+        Args:
+            filename (_type_, optional): path of your imagery. Defaults to None.
+            channel (list, optional): choose the channels that you want read. Defaults to [ 0].The '0' mean just read first channel,you could read any specific channel you want.
+            debug (bool, optional): the tools help find error in your data. Defaults to False.
         """
         print("# ---------------------------------------------------------------------------- #")
         print("#                            TIFF process Toolkit                              #")
@@ -48,13 +52,14 @@ class Raster():
         # self.display = display
         self.debug = debug
         self.channel = channel
+        self.channels = []
         if not filename is None:
             if os.path.isfile(filename):
-                print("# -----TIFF Class Init with :", filename)
+                print("# ----- TIFF Class Init with :", filename)
                 self.filename = filename
                 self.readtif(self.filename)
         else:
-            print("# -----Class TIF init without filename")
+            print("# ----- Class TIF init without filename")
 
     # ---------------------------------------------------------------------------- #
     #                                     Init                                     #
@@ -68,19 +73,20 @@ class Raster():
         self.geotransform = self.dataset.GetGeoTransform()  # 仿射矩阵
         self.projection = self.dataset.GetProjection()  # 地图投影信息
         self.image = self.dataset.ReadAsArray(0, 0, self.width, self.height)
-        # print('-----Original Data Shape : ',self.image.shape)
+        print('# ----- Original Data Shape : ',self.image.shape)
         if 'uint8' in self.image.dtype.name:
             self.datatype = gdal.GDT_Byte
-            # print('image type : uint8')
+            print('# ----- image type : uint8')
         elif 'int8' in self.image.dtype.name:
-            # print('image type : int8')
+            print('# ----- image type : int8')
             self.datatype = gdal.GDT_Byte
         elif 'int16' in self.image.dtype.name:
-            # print('image type : int16')
+            print('# ----- image type : int16')
             self.datatype = gdal.GDT_UInt16
         else:
-            # print('image type : float32')
+            print('# ----- image type : float32')
             self.datatype = gdal.GDT_Float32
+        
         if len(self.image.shape) == 2:
             self.channel_count = 1
         if len(self.image.shape) == 3:
@@ -89,12 +95,27 @@ class Raster():
                 _, _, self.channel_count = self.image.shape
             else:
                 self.image = self.image.transpose(1, 2, 0)
-                self.image = self.image[:, :, self.channel[:]]
+                print("# ----- auto transposed imagery shape is ",
+                      self.image.shape)
+                _, _, self.channel_count = self.image.shape
+        print("# ----- the imagery has ", self.channel_count,"channels")
+        print("# ----- choose channel ",self.channel) 
+        
+        for i in range(len(self.channel)):
+            self.channels.append(self.image[:,:,i])
+            
+        if len(self.channel)==3:
+            self.image = self.image[:, :, self.channel[:]]
+        else:
+            self.image = self.image[:, :, self.channel[0]]
+     
+       
 
 
-    # def displayimagery(self):
-    #     self.percentage = self.fast_percentager_strentching(self.image)
-    #     plt.imshow(self.percentage), plt.show()
+    def displaychannels(self):
+        for channel in self.channels:
+            percentage = self.fast_percentager_strentching(channel)
+            plt.imshow(percentage), plt.show()
 
     # ---------------------------------------------------------------------------- #
     #                                     Read                                     #
@@ -106,20 +127,21 @@ class Raster():
 
     def fast_percentager_strentching(
             self, image=None, percentage=2, sample=10000):
-        """
-        Image ndarray:(W,H,C)
-        Percentage N(0-100)%
+        """_summary_
+
+        Args:
+            image (ndarray, optional): imagery data. Defaults to None.
+            percentage (int, optional): perceptage of strentching. Defaults to 2.
+            sample (int, optional): sample point  count. Defaults to 10000.
+
+        Returns:
+            _type_: _description_
         """
 
         assert not percentage > 100 or percentage < 0, "Invalde Percentage Value"
-        print(
-            "# -------------------------- percentager_strentching -------------------------")
-        print(
-            "# ------------------- process with percentage : ",
-            percentage,
-            "% ------------------")
+        print("# ---------------- percentager_strentching --------------- #")
         percentage = percentage / 100
-        if isinstance(image, None):
+        if image is None:
             image = self.image
         W, H = image.shape[0], image.shape[1]
         w = np.random.randint(0, W, sample)
@@ -325,6 +347,8 @@ def main():
     """
     This part will show the standard function guide.
     """
+    file=Raster("/Users/winshare/workspace/project/projectHalkCloud/data/2021-04-01_1Cloud2Pan-0000000000-0000204800.tif",channel=[0,1])
+    file.displaychannels()
 
 
 if __name__ == '__main__':

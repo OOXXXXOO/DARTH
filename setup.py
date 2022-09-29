@@ -22,7 +22,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="d-arth", # Replace with your own username
-    version="0.1.1",
+    version="0.1.7",
     author="Winshare Tom",
     author_email="tanwenxuan@live.com",
     description="The Satellite Imagery DataSet Toolkit",
@@ -36,16 +36,16 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        "certifi==2020.6.20",
-        "decorating==0.6.1",
-        "esdk-obs-python==3.20.1",
+        "certifi",
+        "decorating",
+        "esdk-obs-python",
+        "tqdm",
+        "olefile",
+        "python-slugify",
+        "text-unidecode",
         "GDAL",
         "numpy",
-        "olefile==0.46",
-        "Pillow==9.0.1",
-        "python-slugify==3.0.3",
-        "text-unidecode==1.2",
-        "tqdm==4.46.1"
+        "Pillow",
     ],
     license='Apache License Version 2.0',
     python_requires='>=3.6',

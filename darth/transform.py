@@ -46,6 +46,15 @@ def mercator_to_wgs(x, y):
 
 
 def transformLat(x, y):
+    """_summary_
+
+    Args:
+        x (_type_): imagery cord x
+        y (_type_): imagery cord y
+
+    Returns:
+        _type_: Lat
+    """
     ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * \
         y + 0.1 * x * y + 0.2 * math.sqrt(abs(x))
     ret += (20.0 * math.sin(6.0 * x * math.pi) + 20.0 *
@@ -58,6 +67,15 @@ def transformLat(x, y):
 
 
 def transformLon(x, y):
+    """_summary_
+
+    Args:
+        x (_type_): imagery cord x
+        y (_type_): imagery cord y
+
+    Returns:
+        _type_: Lon
+    """
     ret = 300.0 + x + 2.0 * y + 0.1 * x * x + \
         0.1 * x * y + 0.1 * math.sqrt(abs(x))
     ret += (20.0 * math.sin(6.0 * x * math.pi) + 20.0 *
@@ -70,13 +88,22 @@ def transformLon(x, y):
 
 
 def delta(lat, lon):
-    '''
+    """    
     Krasovsky 1940
-    //
-    // a = 6378245.0, 1/f = 298.3
-    // b = a * (1 - f)
-    // ee = (a^2 - b^2) / a^2;
-    '''
+    $$
+     a = 6378245.0, 1/f = 298.3
+     
+     b = a * (1 - f)
+     
+     ee = (a^2 - b^2) / a^2;
+    $$
+    Args:
+        lat (_type_): _description_
+        lon (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     a = 6378245.0  # a: Projection factor of satellite ellipsoidal coordinates projected onto a flat map coordinate system
     ee = 0.00669342162296594323  # ee: Eccentricity of ellipsoid
     dLat = transformLat(lon - 105.0, lat - 35.0)
@@ -117,12 +144,16 @@ def wgs_to_gcj(wgsLon, wgsLat):
 
 
 def wgs_to_tile(j, w, z):
-    '''
+    """ 
     Get google-style tile cooridinate from geographical coordinate
     j : Longittude
     w : Latitude
     z : zoom
-    '''
+    Args:
+        j (_type_): Longittude
+        w (_type_): Latitude
+        z (_type_): zoom
+    """
     def isnum(x): return isinstance(x, int) or isinstance(x, float)
     if not(isnum(j) and isnum(w)):
         raise TypeError("j and w must be int or float!")
@@ -149,8 +180,16 @@ def wgs_to_tile(j, w, z):
 
 
 def pixls_to_mercator(zb):
-    # Get the web Mercator projection coordinates of the four corners of the
-    # area according to the four corner coordinates of the tile
+    """Get the web Mercator projection coordinates of the four corners of the
+    area according to the four corner coordinates of the tile
+
+    Args:
+        zb (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+
     inx, iny = zb["LT"]  # left top
     inx2, iny2 = zb["RB"]  # right bottom
     length = 20037508.3427892
@@ -314,10 +353,17 @@ from threading import Thread
 class urloader(Thread):
     # multiple threads downloader
     def __init__(self, urls, datas):
+        """        
         # index represents the number of threads
         # count represents the total number of threads
         # urls represents the list of URLs nedd to be downloaded
         # datas represents the list of data need to be returned.
+
+        Args:
+            urls (_type_): url
+            datas (_type_): datas
+        """
+
         super().__init__()
         self.urls = urls
         self.datas = datas
