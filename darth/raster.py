@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    raster.py                                          :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tanwenxuan <tanwenxuan@didiglobal.com>     +#+  +:+       +#+         #
+#    By: tanwenxuan <tanwenxuan@ceresman.com>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/04/20 17:05:30 by winshare          #+#    #+#              #
-#    Updated: 2022/09/30 01:26:48 by tanwenxuan       ###   ########.fr        #
+#    Updated: 2023/02/23 19:16:54 by tanwenxuan       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ import glob
 import numpy as np
 import PIL.Image as Image
 import matplotlib.pyplot as plt
+
 
 class Raster():
     def __init__(self, filename=None, channel=[
@@ -73,7 +74,7 @@ class Raster():
         self.geotransform = self.dataset.GetGeoTransform()  # 仿射矩阵
         self.projection = self.dataset.GetProjection()  # 地图投影信息
         self.image = self.dataset.ReadAsArray(0, 0, self.width, self.height)
-        print('# ----- Original Data Shape : ',self.image.shape)
+        print('# ----- Original Data Shape : ', self.image.shape)
         if 'uint8' in self.image.dtype.name:
             self.datatype = gdal.GDT_Byte
             print('# ----- image type : uint8')
@@ -86,7 +87,7 @@ class Raster():
         else:
             print('# ----- image type : float32')
             self.datatype = gdal.GDT_Float32
-        
+
         if len(self.image.shape) == 2:
             self.channel_count = 1
         if len(self.image.shape) == 3:
@@ -98,19 +99,16 @@ class Raster():
                 print("# ----- auto transposed imagery shape is ",
                       self.image.shape)
                 _, _, self.channel_count = self.image.shape
-        print("# ----- the imagery has ", self.channel_count,"channels")
-        print("# ----- choose channel ",self.channel) 
-        
+        print("# ----- the imagery has ", self.channel_count, "channels")
+        print("# ----- choose channel ", self.channel)
+
         for i in range(len(self.channel)):
-            self.channels.append(self.image[:,:,i])
-            
-        if len(self.channel)==3:
+            self.channels.append(self.image[:, :, i])
+
+        if len(self.channel) == 3:
             self.image = self.image[:, :, self.channel[:]]
         else:
             self.image = self.image[:, :, self.channel[0]]
-     
-       
-
 
     def displaychannels(self):
         for channel in self.channels:
@@ -177,7 +175,7 @@ class Raster():
     def writeimagery(self, name=None, format="png"):
         if name is None:
             name = self.filename + "_imagery."+format
-        image=Image.fromarray(self.image)
+        image = Image.fromarray(self.image)
         # cv2.imwrite(name, self.image)
         image.save(name)
 
@@ -192,19 +190,21 @@ class Raster():
         cv2 resize image data
         6 parameter 1,5 is resolution ratio  its need /resize_ratio
         """
-        size = (int(self.width * resize_ratio),int(self.height * resize_ratio))
-        image=Image.fromarray(self.image_nparray)
-        image.resize(size,resample=PIL.Image.BILINEAR)
+        size = (int(self.width * resize_ratio),
+                int(self.height * resize_ratio))
+        image = Image.fromarray(self.image_nparray)
+        image.resize(size, resample=PIL.Image.BILINEAR)
         # self.resizedimage = cv2.resize(
         #     self.image_nparray, size, interpolation=cv2.INTER_AREA)
-        self.resizedimage=np.array(image)
+        self.resizedimage = np.array(image)
         self.ResizeGeo = list(self.geotrans)
         print('input Geo parameter, :', self.ResizeGeo)
         self.ResizeGeo[1] = float(self.ResizeGeo[1] / resize_ratio)
         self.ResizeGeo[5] = float(self.ResizeGeo[5] / resize_ratio)
         print('resized Geo parameter ，：', self.ResizeGeo)
         self.geotrans = tuple(self.ResizeGeo)
-    # ready for fix the resize 
+    # ready for fix the resize
+
     def writethreshold2shp(self):
         """
         Set the Boolmap(ndarray) & do polygonize in boolmap to save
@@ -295,7 +295,7 @@ class Raster():
         prosrs, geosrs = self.getSRSPair()
         ct = osr.CoordinateTransformation(geosrs, prosrs)
         coords = ct.TransformPoint(lon, lat)
-        
+
         return coords[:2]
 
     def imagexy2geo(self, row, col):
@@ -347,7 +347,8 @@ def main():
     """
     This part will show the standard function guide.
     """
-    file=Raster("/Users/winshare/workspace/project/projectHalkCloud/data/2021-04-01_1Cloud2Pan-0000000000-0000204800.tif",channel=[0,1])
+    file = Raster(
+        "/Users/winshare/workspace/project/projectHalkCloud/data/2021-04-01_1Cloud2Pan-0000000000-0000204800.tif", channel=[0, 1])
     file.displaychannels()
 
 

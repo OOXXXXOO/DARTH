@@ -12,6 +12,7 @@ from osgeo import osr
 from osgeo import gdal_array
 from osgeo import gdalconst
 
+
 class Vector(Raster):
     def __init__(self, input_shp_path=''):
 
@@ -43,11 +44,13 @@ class Vector(Raster):
             self.Input_path = input_shp_path
             self.DataSource = self.Driver.Open(self.Input_path)
             self.meta = self.DataSource.GetMetadata()
-            
-            print("\n\033[0m# ----------------------------- Meta Information ----------------------------- #")
+
+            print(
+                "\n\033[0m# ----------------------------- Meta Information ----------------------------- #")
             self.print_dict(self.meta)
 
-            print("# ----------------------------- Meta Information ----------------------------- #\n")
+            print(
+                "# ----------------------------- Meta Information ----------------------------- #\n")
             self.Description = self.DataSource.GetDescription()
             print('\033[0m# -----Description :\033[1;32m ', self.Description)
             assert self.DataSource is not None, '\n\n\nERROR-----' + \
@@ -64,24 +67,26 @@ class Vector(Raster):
                     self.Layer.GetName(),
                     self.Layer.GetGeometryColumn())
                 self.LayerDict[self.Layer.GetName()] = self.Layer
-            
-            
+
             self.Srs = self.Layer.GetSpatialRef()
-            self.Extent=self.Layer.GetExtent()
-            print("\033[0m# -----Extent:\033[1;32m ",self.Extent)
-            print("\033[0m# -----Alread Load:\033[1;32m ", input_shp_path,"\033[0m")
+            self.Extent = self.Layer.GetExtent()
+            print("\033[0m# -----Extent:\033[1;32m ", self.Extent)
+            print("\033[0m# -----Alread Load:\033[1;32m ",
+                  input_shp_path, "\033[0m")
             print(
                 "# -------------------------------- DEFINE DONE ------------------------------- #")
 
         else:
-            print("# ----- \033[5;31m Warning: Vector Class init with wrong path or invalid vector file \nPath:",input_shp_path,"\033[0m\n")
+            print(
+                "# ----- \033[5;31m Warning: Vector Class init with wrong path or invalid vector file \nPath:", input_shp_path, "\033[0m\n")
 
     def getDefaultLayerbyName(self, name):
         """
         para:name string of layer name
         """
         self.defaultlayer = self.LayerDict[name]
-        print("# -----Set Default Layer \033[1;32m|",name,"| : \033[0m",self.defaultlayer)
+        print("# -----Set Default Layer \033[1;32m|",
+              name, "| : \033[0m", self.defaultlayer)
         return self.LayerDict[name]
 
     def Info(self):
@@ -185,28 +190,28 @@ class Vector(Raster):
         assert self.ExportLayer is None, 'Invalid Export Layer'
         self.ExportLayer.SetSpatialFilterRect()
 
-    
     def crop_default_layer_by_rect(self, rect):
-        print("# -----Set filter Rect:\033[1;32m",rect,'\033[0m')
+        print("# -----Set filter Rect:\033[1;32m", rect, '\033[0m')
         self.defaultlayer.SetSpatialFilterRect(*rect)
-    
-    def print_dict(self,d,n=0):
-        length=67
-        for k,v in d.items():
+
+    def print_dict(self, d, n=0):
+        length = 67
+        for k, v in d.items():
             # print ('\t'*n)
-            if type(v)==type({}):
+            if type(v) == type({}):
                 print("%s : {" % k)
-                self.print_dict(v,n+1)
+                self.print_dict(v, n+1)
             else:
-                
-                strl=len(str(k))+len(str(v))
-                space=length-strl
-                if strl>length:                    
-                    v=str(v)[:space]
-                print("\033[0m# -----\033[1;34m %s :\033[1;32m  %s\033[0m" % (k,v)+" "*space+"#")
-        if n!=0:
-            print('\t'*(n-1)+ '}')
-    
+
+                strl = len(str(k))+len(str(v))
+                space = length-strl
+                if strl > length:
+                    v = str(v)[:space]
+                print("\033[0m# -----\033[1;34m %s :\033[1;32m  %s\033[0m" %
+                      (k, v)+" "*space+"#")
+        if n != 0:
+            print('\t'*(n-1) + '}')
+
     def Rasterize(self, outputname, Nodata=0):
 
         targetDataSet = gdal.GetDriverByName('GTiff').Create(
@@ -220,26 +225,26 @@ class Vector(Raster):
             targetDataSet,
             [1],
             self.defaultlayer,
-            )
+        )
         targetDataSet = None
-        
-    def generate(self,tiles,output_path="./label"):
+
+    def generate(self, tiles, output_path="./label"):
         print('# ===== \033[5;33mStart Generate.....\033[0m')
         """
         修订  把Rasterize同样使用线程分解的可能性
         """
 
-        self.labellist=[]
+        self.labellist = []
         if not os.path.exists(output_path):
             os.makedirs(output_path)
         for tile in tqdm(tiles):
             self.readtif(tile)
-            filename=tile.split('/')[-1]
-            path=os.path.join(output_path,filename)
+            filename = tile.split('/')[-1]
+            path = os.path.join(output_path, filename)
             self.labellist.append(path)
             self.Rasterize(path)
         return self.labellist
-    
+
     def reset_layer(self):
         self.Layer.ResetReading()
 
@@ -428,7 +433,7 @@ class Vector(Raster):
     #     # if invertPascalVoc:
     #     #     imageDataPIL.save(Labelme_Json_path+filename+'.jpg')
 
- 
+
 def main():
     Vector = SHP("/workspace/data/Water/Beijing.geojson")
     # Vector=SHP("/workspace/SQCV/Data/IO/waterchina.geojson")

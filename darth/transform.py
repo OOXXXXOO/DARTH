@@ -1,3 +1,4 @@
+from threading import Thread
 import numpy as np
 import math
 
@@ -23,6 +24,7 @@ from osgeo import gdalconst
 
 # WGS-84 to Web Mercator
 
+
 def wgs_to_mercator(x, y):
     y = 85.0511287798 if y > 85.0511287798 else y
     y = -85.0511287798 if y < -85.0511287798 else y
@@ -32,6 +34,7 @@ def wgs_to_mercator(x, y):
     return x2, y2
 
 # Web Mercator to WGS-84
+
 
 def mercator_to_wgs(x, y):
     x2 = x / 20037508.34 * 180
@@ -92,9 +95,9 @@ def delta(lat, lon):
     Krasovsky 1940
     $$
      a = 6378245.0, 1/f = 298.3
-     
+
      b = a * (1 - f)
-     
+
      ee = (a^2 - b^2) / a^2;
     $$
     Args:
@@ -155,7 +158,7 @@ def wgs_to_tile(j, w, z):
         z (_type_): zoom
     """
     def isnum(x): return isinstance(x, int) or isinstance(x, float)
-    if not(isnum(j) and isnum(w)):
+    if not (isnum(j) and isnum(w)):
         raise TypeError("j and w must be int or float!")
 
     if not isinstance(z, int) or z < 0 or z > 22:
@@ -219,7 +222,6 @@ def tile_to_pixls(zb):
     return out
 
 
-
 def getExtent(x1, y1, x2, y2, z, source="Google China"):
     pos1x, pos1y = wgs_to_tile(x1, y1, z)
     pos2x, pos2y = wgs_to_tile(x2, y2, z)
@@ -240,15 +242,15 @@ def getExtent(x1, y1, x2, y2, z, source="Google China"):
 
 def saveTiff(r, g, b, gt, filePath):
     # print("save:",gt)
-    if type(r)==pil.Image:
-        r,g,b=np.array(r),np.array(g),np.array(b)
+    if type(r) == pil.Image:
+        r, g, b = np.array(r), np.array(g), np.array(b)
     driver = gdal.GetDriverByName('GTiff')
     # Create a 3-band dataset
     outRaster = driver.Create(filePath,
-        r.shape[1],
-        r.shape[0],
-        3,
-        gdal.GDT_Byte)
+                              r.shape[1],
+                              r.shape[0],
+                              3,
+                              gdal.GDT_Byte)
     outRaster.SetGeoTransform(gt)
     try:
         outRasterSRS = osr.SpatialReference()
@@ -263,9 +265,6 @@ def saveTiff(r, g, b, gt, filePath):
     outRaster = None
     # print("Image Saved")
 # ---------------------------------------------------------
-
-
-
 
 
 def TileXYToQuadKey(tileX, tileY, level):
@@ -310,13 +309,12 @@ def get_urls(x1, y1, x2, y2, z, source, style):
             i,
             j,
             z,
-            style) for j in range(pos1y,pos1y +leny) for i in range(pos1x,pos1x +lenx)
-            ]
+            style) for j in range(pos1y, pos1y + leny) for i in range(pos1x, pos1x + lenx)
+    ]
     return urls
 # ---------------------------------------------------------
 
 # ---------------------------------------------------------
-
 
 
 def merge_tiles(datas, x1, y1, x2, y2, z):
@@ -334,10 +332,9 @@ def merge_tiles(datas, x1, y1, x2, y2, z):
     return outpic
 
 
-
 def download_tiles(url):
-    data=[None]
-    task=urloader(url,data)
+    data = [None]
+    task = urloader(url, data)
     task.start()
     task.join()
     print(multiprocessing.current_process())
@@ -348,7 +345,6 @@ def download_tiles(url):
 
 # ---------------------------------------------------------
 
-from threading import Thread
 
 class urloader(Thread):
     # multiple threads downloader
@@ -371,10 +367,10 @@ class urloader(Thread):
     def download(self, url):
         HEADERS = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.76 Safari/537.36'
-            }
+        }
         header = ur.Request(url, headers=HEADERS)
         err = 0
-        while(err < 3):
+        while (err < 3):
             try:
                 data = ur.urlopen(header).read()
             except BaseException:
@@ -384,6 +380,6 @@ class urloader(Thread):
         raise Exception("Bad network link.")
 
     def run(self):
-        url=self.urls
+        url = self.urls
         self.datas = self.download(url)
         print(self.datas)
